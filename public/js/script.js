@@ -4,37 +4,60 @@ document.addEventListener('DOMContentLoaded', function () {
     const descriptionInput = document.getElementById('description');
     const todoList = document.getElementById('todoList');
 
+    let editingItemId = null;
+
     // 1. Fetch All Todos on page reload (Ex: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event),
     //also dynamically create elements(checkbox, li element, delete button) for all items in the list of todo - call GET API
     fetchTodos();
 
-    //Handle form submission to create new to-do item
+    //Handle form submission to create new to-do item or update existing to-do item
     todoForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const title = titleInput.value;
         const description = descriptionInput.value;
 
-        const newTodo = {
-            title,
-            description
-        };
-
-        console.log(JSON.stringify(newTodo));
-        //2. Listner on submit event => trigger the post api with data (title and description) to create a new to-do item - call POST API
-        fetch('/todos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newTodo)
-        })
-            .then(res => res.json())
-            .then(todo => {
-                titleInput.value = '';
-                descriptionInput.value = '';
-                fetchTodos();
+        if (editingItemId) {
+            //Updating existing item
+            fetch(`/todos/${editingItemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description })
             })
-            .catch(err => console.error('Error creating todo item: ', err));
+                .then(res => res.json())
+                .then(() => {
+                    editingItemId = null; //Reset edit mode
+                    titleInput.value = '';
+                    descriptionInput.value = '';
+                    fetchTodos();
+                })
+                .catch(err => console.error('Error on updating todo item: ', err));
+
+        } else {
+            //Creating a new to-do item
+            const newTodo = {
+                title,
+                description
+            };
+
+            console.log(JSON.stringify(newTodo));
+            //2. Listner on submit event => trigger the post api with data (title and description) to create a new to-do item - call POST API
+            fetch('/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newTodo)
+            })
+                .then(res => res.json())
+                .then(todo => {
+                    titleInput.value = '';
+                    descriptionInput.value = '';
+                    fetchTodos();
+                })
+                .catch(err => console.error('Error creating todo item: ', err));
+        }
     });
 
 
@@ -117,28 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         titleInput.value = title;
         descriptionInput.value = description;
 
-        //Change the form submission behavior to update existing todo item(Here, we want to use the same submit button that's why)
-        todoForm.onsubmit = function () {
-            e.preventDefault();
-            const updatedTitle = titleInput.value;
-            const updatedDescription = descriptionInput.value;
-
-            fetch(`/todos/${todo._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: updatedTitle, description: updatedDescription })
-            })
-                .then(res => res.json())
-                .then(() => {
-                    titleInput.value = '';
-                    descriptionInput.value = '';
-                    fetchTodos();
-                })
-                .catch(err => console.error('Error on updating todo item: ', err));
-        }
-
-
+        // Set editingItemId for edit operation
+        editingItemId = id;
     }
 });
