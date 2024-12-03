@@ -53,9 +53,16 @@ app.put('/todos/:id', async (req, res) => {
     try {
         const toBeUpdated = await Todo.findById(req.params.id);
         if (toBeUpdated) {
-            toBeUpdated.title = title;
-            toBeUpdated.description = description;
-            toBeUpdated.completed = completed;
+            //Some checkes to update only if there is proper value
+            if (title != undefined) {
+                toBeUpdated.title = title;
+            }
+            if (description != undefined) {
+                toBeUpdated.description = description;
+            }
+            if (completed != undefined) {
+                toBeUpdated.completed = completed;
+            }
 
             await toBeUpdated.save();
             res.status(200).json(toBeUpdated);
