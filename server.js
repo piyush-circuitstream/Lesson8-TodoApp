@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 //Connection of mongoDB
-mongoose.connect('mongodb://localhost:27017/')
+mongoose.connect('mongodb://localhost:27017/test')
     .then((data) => {
         console.log("My database is connected!")
     }).catch((err) => {
@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/')
 
 // Serve the index.html for default route
 app.get('/', (req, res) => {
-    res.sendFile(__dirname, './views/index.html');
+    res.sendFile(__dirname + '/public/views/index.html');
 });
 
 // Fetch all Todo items 
@@ -51,7 +51,7 @@ app.post('/todos', async (req, res) => {
 app.put('/todos/:id', async (req, res) => {
     const { title, description, completed } = req.body;
     try {
-        const toBeUpdated = Todo.findById(req.params.id);
+        const toBeUpdated = await Todo.findById(req.params.id);
         if (toBeUpdated) {
             toBeUpdated.title = title;
             toBeUpdated.description = description;
@@ -71,7 +71,7 @@ app.put('/todos/:id', async (req, res) => {
 // Delete a to-do item
 app.delete('/todos/:id', async (req, res) => {
     try {
-        let result = Todo.findByIdAndDelete(req.params.id);
+        let result = await Todo.findByIdAndDelete(req.params.id);
         if (result) {
             res.status(200).json({ message: "Todo item has been deleted successfully!" });
         } else {
