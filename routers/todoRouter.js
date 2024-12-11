@@ -69,3 +69,5 @@ router.delete('/todos/:id', async (req, res) => {
         res.status(500).json({ message: "Error on deleting a to-do item. Please try again later.", error: err });
     }
 })
+
+module.exports = router;

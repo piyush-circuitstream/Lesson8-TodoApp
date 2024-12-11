@@ -23,4 +23,30 @@ const todoSchema = mongoose.Schema({
 
 const Todo = mongoose.model('Todo', todoSchema);
 
-module.exports = { Todo };
+const userSchema = mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    hashedPassword: {
+        type: String,
+        required: true
+    },
+    passwordSalt: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        required: true
+    },
+    lastLogin: {
+        type: Date
+    }
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = { Todo, User };

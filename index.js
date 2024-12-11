@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
@@ -24,10 +25,10 @@ mongoose.connect('mongodb://localhost:27017/test')
         console.error("Error connecting to MongoDB: ", err);
     });
 
-// Serve the index.html for default route
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/views/index.html');
-});
+// // Serve the index.html for default route
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/public/views/index.html');
+// });
 
 //server listening to the requests
 app.listen(PORT, () => {
