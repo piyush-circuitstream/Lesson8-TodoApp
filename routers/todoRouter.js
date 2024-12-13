@@ -6,7 +6,9 @@ const { Todo } = require('../models/models');
 // Fetch all Todo items 
 router.get('/todos', async (req, res) => {
     try {
-        const todos = await Todo.find();
+        const todos = await Todo.find({
+            user: req.user.id
+        });
         res.status(200).json(todos);
     } catch (err) {
         res.status(500).json({ message: "Something went wrong! Please try again later.", error: err })
@@ -19,7 +21,8 @@ router.post('/todos', async (req, res) => {
     try {
         const newTodo = new Todo({
             title,
-            description
+            description,
+            user: req.user.id
         });
         await newTodo.save();
         res.status(201).json({ message: "New to-do item is created successfully!" });

@@ -12,8 +12,8 @@
     <h2>Register</h2>
     <div id="register-form-container">
         <form id="register-form">
-            <input type="text" id="username" placeholder="Enter your username here..." required>
-            <input type="password" id="password" placeholder="Enter your password here..." required>
+            <input type="text" id="register-username" placeholder="Enter your username here..." required>
+            <input type="password" id="register-password" placeholder="Enter your password here..." required>
             <button type="submit">Register</button>
         </form>
     </div>
@@ -21,10 +21,14 @@
 
     <div id="login-form-container">
         <form id="login-form">
-            <input type="text" id="username" placeholder="Enter your username here..." required>
-            <input type="password" id="password" placeholder="Enter your password here..." required>
+            <input type="text" id="login-username" placeholder="Enter your username here..." required>
+            <input type="password" id="login-password" placeholder="Enter your password here..." required>
             <button type="submit">Login</button>
         </form>
+    </div>
+
+    <div id="error">
+        <!-- Placeholder to show error dynamically -->
     </div>
 
     <script src="./js/login.js"></script>
