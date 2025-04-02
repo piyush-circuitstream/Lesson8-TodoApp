@@ -23,7 +23,6 @@ const loggedIn = (req, res, next) => {
         res.redirect('/app/login.html');
     }
 }
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
