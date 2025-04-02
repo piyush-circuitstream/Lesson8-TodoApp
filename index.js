@@ -11,6 +11,7 @@ const session = require('express-session');
 
 const authRouter = require('./routers/authRouter');
 const todoRouter = require('./routers/todoRouter');
+require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
@@ -41,8 +42,8 @@ app.use((err, req, res, next) => {
     res.status(err.status ?? 500).send(err);
 });
 
-//Connection of mongoDB
-mongoose.connect('mongodb://localhost:27017/todo-app')
+// Connection of mongoDB
+mongoose.connect(process.env.MONGODB_URI)
     .then((data) => {
         console.log("My database is connected!")
     }).catch((err) => {
@@ -51,5 +52,6 @@ mongoose.connect('mongodb://localhost:27017/todo-app')
 
 //server listening to the requests
 app.listen(PORT, () => {
+    // console.log(`${process.env.MONGODB_URI}`)
     console.log(`My server is listening to ${PORT}`)
 });
