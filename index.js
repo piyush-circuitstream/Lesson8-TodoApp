@@ -5,13 +5,13 @@ const passport = require('passport');
 
 const app = express();
 
-const PORT = 5000;
-
 const session = require('express-session');
 
 const authRouter = require('./routers/authRouter');
 const todoRouter = require('./routers/todoRouter');
 require('dotenv').config();
+
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
@@ -25,7 +25,7 @@ const loggedIn = (req, res, next) => {
 }
 
 app.use(session({
-    secret: 'w2vuYZFYAIDBrMxD',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
